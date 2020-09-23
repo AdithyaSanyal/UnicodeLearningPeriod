@@ -7,6 +7,7 @@ import DatePicker from 'react-native-datepicker'
 var gender=[
    {label:"Male",value:'Male'},
 	 {label:"Female",value:'Female'},
+   {label:"Other",value:'Other'},
 ];
 
 
@@ -99,7 +100,8 @@ export default class SignUp extends React.Component{
     <RadioForm 
 		  radio_props={gender}
       buttonSize={15}
-      labelStyle={{fontSize: 15, color: 'rgb(255,255,255)'}}
+      labelStyle={{fontSize: 15, color: 'rgb(255,255,255)',marginRight: 20 }}
+      formHorizontal={true}
       buttonColor={'white'}
       selectedButtonColor={'white'}
 		  onPress={val => this.setState({ gender: val.toString() })}
@@ -112,7 +114,7 @@ export default class SignUp extends React.Component{
         style={styles.dtext}
         date={this.state.date}
         mode="date"
-        placeholder="select date"
+        placeholder="SELECT DATE"
         format="DD-MM-YYYY"
         minDate="01-01-1900"
         maxDate={new Date()}
@@ -140,7 +142,9 @@ export default class SignUp extends React.Component{
 
     <View style={styles.view}>
     <TouchableOpacity 
-    onPress={this.onSubmit}
+    onPress={
+        this.onSubmit
+    }
     style={styles.button}
     > 
     <Text style={styles.text1}>Submit</Text>

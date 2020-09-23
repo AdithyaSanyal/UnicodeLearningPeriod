@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer,useNavigation } from '@react-navigation/native';
 import LoginPage from "./src/LoginPage";
 import Details from "./src/DetailsScreen";
+import VideoScreen from "./src/VideoScreen";
 
 
 export class Page extends React.Component{
@@ -66,9 +67,23 @@ export default class App extends React.Component{
         }}
         />
         <Stack.Screen name="Details" 
-        component={Details} 
+        component={Details}
         options={{
           title: 'Details',
+          headerStyle: {
+            backgroundColor: '#009387',
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            fontSize:25,
+          },
+        }}
+        />
+        <Stack.Screen name="VideoScreen" 
+        component={VideoScreen}
+        options={{
+          title: 'VideoScreen',
           headerStyle: {
             backgroundColor: '#009387',
           },

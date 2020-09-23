@@ -10,6 +10,10 @@ target 'UnicodeProject' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'RCTYouTube', :path => '../node_modules/react-native-youtube'
+
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
   target 'UnicodeProjectTests' do
     inherit! :complete
     # Pods for testing

@@ -6,15 +6,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { NavigationContainer,useNavigation } from '@react-navigation/native';
 import SignUp from './SignUpPage';
 import LoginPage from './LoginPage';
+import SearchPage from './SearchPage';
 
 
-function SearchPage() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>This is the Search Page!</Text>
-    </View>
-  );
-}
 
 function Favourites() {
   return (
@@ -73,9 +67,14 @@ export default class MyTabs extends React.Component{
 }
 
 
-
-
-
+const clearAppData = async function() {
+    try {
+        const keys = await AsyncStorage.getAllKeys();
+        await AsyncStorage.multiRemove(keys);
+    } catch (error) {
+        console.error('Error clearing app data.');
+    }
+}
 
 export class Details extends React.Component{
     constructor(props){
@@ -111,7 +110,7 @@ export class Details extends React.Component{
     render(){
         return (
         <View style={styles.container}>
-        <Icon name="ios-person" style={styles.icon} size={150}/>
+        {/* <Icon name="ios-person" style={styles.icon} size={150}/> */}
         <View style={styles.section}>
         <Text style={styles.nameh}>Name:</Text>
         <Text style={styles.name}>{this.state.username}</Text>
@@ -128,6 +127,15 @@ export class Details extends React.Component{
         <Text style={styles.nameh}>Date of Birth:</Text>
         <Text style={styles.name}>{this.state.date}</Text>
         </View>
+        <View style={styles.button}>
+        <TouchableOpacity
+        onPress={()=>{this.props.navigation.navigate("Login");
+                      // clearAppData();
+        }}
+        >
+        <Text style={styles.nameh}>LOGOUT</Text>
+        </TouchableOpacity>
+        </View>
         
         </View>
 
@@ -141,6 +149,10 @@ const styles=StyleSheet.create({
     flex:1,
     justifyContent:'center',
     backgroundColor:'#007664',
+    
+  },
+  button:{
+    marginVertical:50,
   },
   section:{
     flexDirection:'row',
