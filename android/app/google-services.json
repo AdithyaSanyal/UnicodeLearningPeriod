@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "474962181686",
+    "firebase_url": "https://unicodelp.firebaseio.com",
+    "project_id": "unicodelp",
+    "storage_bucket": "unicodelp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:474962181686:android:c2ea096dfbaf829155a297",
+        "android_client_info": {
+          "package_name": "com.unicodeproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "474962181686-rl92qp1djcgv4m381ce7e5mt9pkd65l1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcZNrMkEljfzy_xBGqFNAbEw9yEcfvXcw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "474962181686-rl92qp1djcgv4m381ce7e5mt9pkd65l1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

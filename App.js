@@ -7,6 +7,8 @@ import { NavigationContainer,useNavigation } from '@react-navigation/native';
 import LoginPage from "./src/LoginPage";
 import Details from "./src/DetailsScreen";
 import VideoScreen from "./src/VideoScreen";
+import firebase from '@react-native-firebase/app';
+
 
 
 export class Page extends React.Component{
