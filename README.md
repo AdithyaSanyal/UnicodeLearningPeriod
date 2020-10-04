@@ -24,3 +24,6 @@ Logging in after Signing up
 Favourites Screen 
 
 ![Screenshot_1600193255](https://user-images.githubusercontent.com/66916445/93249515-0dbc4080-f7af-11ea-8e87-73148c920086.png)
+
+FireBase Console
+![Screenshot 2020-10-04 223933](https://user-images.githubusercontent.com/66916445/95022146-fd530380-0692-11eb-8fbd-38219c30e8cd.png)
