@@ -18,14 +18,6 @@ export class Page extends React.Component{
   render(){
     return <View style={styles.container}>
     <SignUp />
-    <View style={styles.view1}>
-    <TouchableOpacity 
-    style={styles.login}
-    onPress={()=>this.props.navigation.navigate('Login')}> 
-    <Text style={styles.ltext}>Already have an account?Login</Text>
-    </TouchableOpacity>
-    </View>
-     
     </View>
   }
 };
@@ -122,26 +114,4 @@ const styles = StyleSheet.create({
       borderBottomColor:'rgb(255,255,255)',
       borderBottomWidth:1
   },
-  login:{
-    height:45,
-    width:'100%',
-    justifyContent:'center',
-    alignItems:'center',
-    alignContent:'center',
-    borderRadius:15,
-  },
-  view1:{
-    paddingTop:20,
-    alignSelf:'stretch',
-    paddingLeft:10,
-    justifyContent:'center',
-  },
-   ltext:{
-    color:'white',
-    alignSelf:'center',
-    paddingTop:1,
-    fontSize:20,
-    paddingBottom:30,
-    textDecorationLine:'underline',
-  },
-});
+ });

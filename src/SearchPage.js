@@ -40,6 +40,7 @@ const SearchPage=()=> {
       <FlatList
       data={miniCard}
       renderItem={({item})=>{
+        console.log({item});
         return <MiniCard
         videoId={item.id.videoId}
         title={item.snippet.title}

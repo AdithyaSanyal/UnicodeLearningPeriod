@@ -7,17 +7,10 @@ import { NavigationContainer,useNavigation } from '@react-navigation/native';
 import SignUp from './SignUpPage';
 import LoginPage from './LoginPage';
 import SearchPage from './SearchPage';
+import Favourites from './FavouritesScreen';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
-
-function Favourites() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>This is the Favourites Page!</Text>
-    </View>
-  );
-}
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -66,36 +59,47 @@ export default class MyTabs extends React.Component{
     </Tab.Navigator>
   }
 }
-
-
-
 export class Details extends React.Component{
-
-    state={
+    constructor(props){
+    super(props);
+    this.getFrom();
+    this.getData();
+    this.state={
+        id:'',
         email:'',
         username:'',
         date:'',
+        gender:'',
         user:{
       image:'',
              }
     }
-
-    constructor(props){
-    super(props);
-    this.getData();
-    this.subscriber=firestore().collection('users').doc('Aw1LdNN1tirPlYYWXbKH').onSnapshot(doc=>{
-    this.setState({
-      user:{
-        image:doc.data().image
-      }
-    })
-    })
     }
 
     signOut=()=>{
       auth().signOut()
       .then(()=>alert("User has signed out"))
       this.props.navigation.navigate("Login")
+    }
+
+    getFrom=()=>{
+      const userRef=firestore().collection('users').where('email', '==', auth().currentUser.email);
+      userRef.get().then(querySnapshot=>{
+        querySnapshot.forEach(documentSnapshot => {
+      const id=documentSnapshot.id;
+      this.setState({
+        username:documentSnapshot.data().username,
+        email:documentSnapshot.data().email,
+        gender:documentSnapshot.data().gender,
+        date:documentSnapshot.data().date,
+        user:{
+      image:documentSnapshot.data().image,
+             }
+      })
+    });
+      }
+
+      );
     }
 
     getData=async()=>{
@@ -105,19 +109,6 @@ export class Details extends React.Component{
     this.setState({email})
   }
 });
-      const username=await AsyncStorage.getItem('username')
-      if(username!==null){
-        this.setState({username})
-      }
-      const gender=await AsyncStorage.getItem('gender')
-      if(gender!==null){
-        this.setState({gender})
-      }
-      const date=await AsyncStorage.getItem('date')
-      if(date!==null){
-        this.setState({date})
-      }
-    
   }
 
     render(){
@@ -162,7 +153,6 @@ export class Details extends React.Component{
         )
     }
 }
-
 const styles=StyleSheet.create({
   container:{
     alignItems:'center',

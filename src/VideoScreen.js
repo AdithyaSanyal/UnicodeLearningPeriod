@@ -1,13 +1,22 @@
 import React,{useState} from 'react';
 import {Text,View,StyleSheet,TextInput,Image,TouchableOpacity} from 'react-native';
 import YouTube from 'react-native-youtube';
+import Icon from 'react-native-vector-icons/Ionicons';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 
 export default class VideoScreen extends React.Component {
   constructor(props){
     super(props);
+    
+    this.dbRef=firestore().collection('favourites');
+    // this.setState({
+    //   videoId:this.props.route.params.videoId,
+    // })
   }
   state={
+    videoId:'',
     isReady: false,
     status: 'buffering',
     quality: 'medium',
@@ -18,7 +27,24 @@ export default class VideoScreen extends React.Component {
     currentTime: 0,
     duration:0,
   };
+
+    // const dbRef=firestore().collection('users').where('email', '==', auth().currentUser.email);
+    // this.dbRef.add({
+    //   favourites:this.state.videoId,
+    // })
+    //.where('email', '==', auth().currentUser.email);
+
+  addToFavourites=async(videoId)=>{
+    alert('Added to Favourites');
+    var currentUser=await auth().currentUser;
+    this.dbRef.add({
+      email:auth().currentUser.email,
+      favourites:this.props.route.params.videoId,
+    })
+  }
+
   render(){  
+    const dbRef=firestore().collection('users').where('email', '==', auth().currentUser.email);
     const videoId = this.props.route.params.videoId;
     return(
     <View>
@@ -43,6 +69,7 @@ export default class VideoScreen extends React.Component {
 />
 <View style={styles.container1}>
 <View style={styles.container}>
+
 <TouchableOpacity
 onPress={() => this.setState(s => ({ isPlaying: !s.isPlaying }))}
 style={styles.button}
@@ -58,8 +85,20 @@ onPress={()=>this._videoPlayer.seekTo(0)}
 </TouchableOpacity>
 
 
-
+<View style={styles.view}>
 <Text style={styles.buttonText1}>Status:{this.state.status}</Text>
+</View>
+
+
+<TouchableOpacity style={{flexDirection:'row'}}
+onPress={()=>{this.addToFavourites(videoId);}}
+//this.addToFavourites(videoId)
+>
+<Icon
+name="md-star" size={32}
+/>
+<Text style={styles.buttonText1}> Add to favourites</Text>
+</TouchableOpacity>
 </View>
 
 
@@ -89,7 +128,7 @@ const styles=StyleSheet.create({
   buttonText1:{
     fontSize:20,
     fontWeight:'bold',
-    color:'#000000'
+    color:'#000000',
   },
   button:{
     borderWidth:1,
@@ -110,6 +149,9 @@ const styles=StyleSheet.create({
     height:50,
     alignItems:'center',
     justifyContent:'center',
-    marginVertical:50,
+    marginVertical:5,
+  },
+  view:{
+    paddingBottom:50,
   }
 })

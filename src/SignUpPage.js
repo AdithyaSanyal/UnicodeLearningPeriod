@@ -1,10 +1,9 @@
 import React,{useState} from 'react';
-import { StyleSheet, Text, View, SafeAreaView, ScrollView, TextInput ,Button, StatusBar, TouchableOpacity, Image } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator, SafeAreaView, ScrollView, TextInput ,Button, StatusBar, TouchableOpacity, Image } from 'react-native';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import AsyncStorage from '@react-native-community/async-storage';
 import DatePicker from 'react-native-datepicker'
 import auth from '@react-native-firebase/auth';
-import {Avatar} from 'react-native-paper';
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -21,38 +20,37 @@ var gender=[
 
 
 export default class SignUp extends React.Component{
-  state={
+  
+  constructor(props){
+    super(props);
+    this.dbRef=firestore().collection('users');
+    this.state={
     username:"",
     email:"",
     password:"",
     gender:'',
     date:'',
+    isLoading:false,
     user:{
       image:'https://d1nhio0ox7pgb.cloudfront.net/_img/v_collection_png/128x128/shadow/user_add.png',
-      
     }
-  }
+  };
+    }
 
-  
-  
-  constructor(props){
-    super(props);
-    this.getData();
-    // this.subscriber=firestore().collection('users').doc('Aw1LdNN1tirPlYYWXbKH').onSnapshot(doc=>{
-    // this.setState({
-    //   user:{
-    //     image:doc.data().image
-    //   }
-    // })
-    // })
+  inputValueUpdate = (val, prop) => {
+    const state = this.state;
+    state[prop] = val;
+    this.setState(state);
   }
 
   
 
   onSubmit=async()=>{
+  if(this.state.username === ''||this.state.email === ''||this.state.password === ''||this.state.gender === ''||this.state.date === ''){
+    alert("Fill all the fields please");
+  }
+  else{
     try {
-      await AsyncStorage.multiSet([['username',this.state.username],['gender',this.state.gender],['date',this.state.date]])
-      
       auth()
     .createUserWithEmailAndPassword(this.state.email, this.state.password)
     .then(()=>{
@@ -69,33 +67,25 @@ export default class SignUp extends React.Component{
 
     console.error(error);
   })
-      alert("Data saved")
     } catch (error) {
       console.error();
     }
+    this.setState({isLoading:true,});
+    this.dbRef.add({
+      username:this.state.username,
+      email:this.state.email,
+      gender:this.state.gender,
+      date:this.state.date,
+    }).catch((e)=>{
+        console.log(e);
+        this.setState({
+          isLoading:false,
+        })
+      })
+  }
   }
 
-  getData=async()=>{
-    try {
-      const username=await AsyncStorage.getItem('username')
-      if(username!==null){
-        this.setState({username})
-      }
-      const gender=await AsyncStorage.getItem('gender')
-      if(gender!==null){
-        this.setState({gender})
-      }
-      const date=await AsyncStorage.getItem('date')
-      if(date!==null){
-        this.setState({date})
-      }
-    } catch (error) {
-      console.error();
-    }
-  }
-
-
-  CameraPhoto=()=>{
+CameraPhoto=()=>{
     ImagePicker.openCamera({
   width: 300,
   height: 400,
@@ -205,7 +195,7 @@ export default class SignUp extends React.Component{
     autoCapitalize='words'
     onSubmitEditing={()=>this.email.focus()}
     value={this.state.username}
-    onChangeText={val=>this.setState({username:val})}
+    onChangeText={(val) => this.inputValueUpdate(val, 'username')}
     />
      
     <TextInput style={styles.textinput} 
@@ -215,7 +205,7 @@ export default class SignUp extends React.Component{
     ref={(input)=>this.email=input}
     onSubmitEditing={()=>this.password.focus()}
     value={this.state.email}
-    onChangeText={val=>this.setState({email:val})}
+    onChangeText={(val) => this.inputValueUpdate(val, 'email')}
     />
 
     <TextInput style={styles.textinput} 
@@ -225,7 +215,7 @@ export default class SignUp extends React.Component{
     secureTextEntry={true}
     ref={(input)=>this.password=input}
     value={this.state.password}
-    onChangeText={val=>this.setState({password:val})}
+    onChangeText={(val) => this.inputValueUpdate(val, 'password')}
     />
     
     <Text style={styles.text}>Gender:</Text>
@@ -236,7 +226,7 @@ export default class SignUp extends React.Component{
       formHorizontal={true}
       buttonColor={'white'}
       selectedButtonColor={'white'}
-		  onPress={val => this.setState({ gender: val.toString() })}
+		  onPress={(val) => this.inputValueUpdate(val.toString(), 'gender')}
       value={this.state.gender}
 		  />
    
@@ -250,7 +240,7 @@ export default class SignUp extends React.Component{
         format="DD-MM-YYYY"
         minDate="01-01-1900"
         maxDate={new Date()}
-        onDateChange={val=>this.setState({date:val})}
+        onDateChange={(val) => this.inputValueUpdate(val, 'date')}
         customStyles={{
           dateIcon: {
             position: 'absolute',
@@ -277,17 +267,19 @@ export default class SignUp extends React.Component{
     <TouchableOpacity 
     onPress={
         this.onSubmit
-        // this.createUser
     }
     style={styles.button}
     > 
     <Text style={styles.text1}>Submit</Text>
     </TouchableOpacity>
-    
+    <View style={styles.view1}>
+    <TouchableOpacity 
+    style={styles.login}
+    onPress={()=>this.props.navigation.navigate('Login')}> 
+    <Text style={styles.ltext}>Already have an account?Login</Text>
+    </TouchableOpacity>
     </View>
-
-    
-
+    </View>
     </View>
   }
 }
@@ -383,5 +375,27 @@ const styles = StyleSheet.create({
   panel:{
     backgroundColor:'#EF5350',
     width:'100%'
-  }
+  },
+  login:{
+    height:45,
+    width:'100%',
+    justifyContent:'center',
+    alignItems:'center',
+    alignContent:'center',
+    borderRadius:15,
+  },
+  view1:{
+    paddingTop:20,
+    alignSelf:'stretch',
+    paddingRight:30,
+    justifyContent:'center',
+  },
+  ltext:{
+    color:'white',
+    alignSelf:'center',
+    paddingTop:1,
+    fontSize:20,
+    paddingBottom:30,
+    textDecorationLine:'underline',
+  },
 });
